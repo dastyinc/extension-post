@@ -18,6 +18,9 @@
     "paths": {
       "$lib/*": [
         "src/lib/*"
+      ],
+      "$static/*": [
+        "src/static/*"
       ]
     }
   },
