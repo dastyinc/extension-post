@@ -1,7 +1,7 @@
 <script lang="ts">
     import {fade} from "svelte/transition";
     import {getContext, onMount} from "svelte";
-    import Box from "$lib/Box.svelte";
+    import {Box} from "@dastyinc/kit-panel";
 
     const {throttle, ws, wsStore, api} = getContext('utils');
     const channel = getContext('channel');
