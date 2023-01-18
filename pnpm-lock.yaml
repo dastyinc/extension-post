@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@dastyinc/kit-panel': ^0.0.6
+  '@dastyinc/kit-panel': ^0.0.11
   '@sveltejs/vite-plugin-svelte': ^2.0.2
   '@tsconfig/svelte': ^3.0.0
   sass: ^1.57.1
@@ -13,7 +13,7 @@ specifiers:
   vite: ^4.0.4
 
 devDependencies:
-  '@dastyinc/kit-panel': 0.0.6
+  '@dastyinc/kit-panel': 0.0.11
   '@sveltejs/vite-plugin-svelte': 2.0.2_svelte@3.55.1+vite@4.0.4
   '@tsconfig/svelte': 3.0.0
   sass: 1.57.1
@@ -83,8 +83,8 @@ packages:
       w3c-keyname: 2.2.6
     dev: true
 
-  /@dastyinc/kit-panel/0.0.6:
-    resolution: {integrity: sha512-SuScKb+8uu/IA0r5YbzTveKHS0Vbo/R3E28HkiZ3N1XQNo6lEES4lYesaJj9kHN7RQU0doz1xWlKb7TfXQTnDw==, tarball: download/@dastyinc/kit-panel/0.0.6/ab72627c87d9cf576200abd395a607b178fce9cb}
+  /@dastyinc/kit-panel/0.0.11:
+    resolution: {integrity: sha512-QzlSQEZk3lAU52gJKfrziRoGTsAHk6WemOkmKpMMEq15X9O8ibAvR4lIz+BsXw0sBEeVLUswHmI0rnfQKpLWcA==, tarball: download/@dastyinc/kit-panel/0.0.11/33ae4d2197ec3a66c3bcb72e4e9c1dd6c6877aa5}
     dependencies:
       nunui: 0.0.69
       reconnecting-websocket: 4.4.0

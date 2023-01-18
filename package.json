@@ -10,7 +10,7 @@
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
-    "@dastyinc/kit-panel": "^0.0.6",
+    "@dastyinc/kit-panel": "^0.0.11",
     "@sveltejs/vite-plugin-svelte": "^2.0.2",
     "@tsconfig/svelte": "^3.0.0",
     "sass": "^1.57.1",

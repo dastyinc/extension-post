@@ -5,7 +5,7 @@
 
     const {throttle, ws, wsStore, api} = getContext('utils');
     const channel = getContext('channel');
-    const {user_id, user_name} = getContext('account');
+    let {user_id, user_name} = getContext('account');
 
     let sendWs, curr = -1;
 
@@ -32,11 +32,13 @@
 
     async function alterSelected(post) {
         await api(`/post/topic/delete/${post.post_id}`, {}, 'DELETE')
+        _user_name = post.user_name;
         post_content = post.post_content;
         api('/post/topic', {user_id, user_name, channel_id: channel, post_content, selected}).then(() => {
             sendPostUpdate()
         }).catch(({error}) => {
         })
+        _user_name = "";
         post_content = "";
         showMore = false;
     }
@@ -105,8 +107,7 @@
     <div class="title">여기우리 대화방</div>
 </div>
 
-<div style="float: right; margin-top: -1.4rem"><span class="material-symbols-outlined"
-                                                     on:click={showAddFunc}>{showAdd ? "close" : "add"}</span></div>
+<div style="float: right; margin-top: -1.4rem"><span class="material-symbols-outlined" on:click={showAddFunc}>{showAdd ? "close" : "add"}</span></div>
 
 {#await getPost()}
     <Box style="padding: 0.938rem 1.25rem 1.25rem 1.25rem">Loading...</Box>
