@@ -19,10 +19,10 @@
 
     onMount(() => ws(channel).conn(({message, uid, send}) => {
         sendWs = send;
-        wsStore(message, 'POST_UPDATE').subscribe((msg) => updatePost(msg.id));
+        wsStore(message, 'POST_UPDATE').subscribe(updatePost);
     }))
     $: sendPostUpdate = throttle(() => {
-        sendWs?.({type: 'POST_UPDATE'});
+        sendWs?.('POST_UPDATE');
     });
 
     async function getPost() {
