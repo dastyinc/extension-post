@@ -87,7 +87,7 @@ packages:
     resolution: {integrity: sha512-g5CEEtfZAOwYWBoZ8qs7wt+rCbauloQ2gRC/oukv4mVKG2rZh0NoI/iCSV67OxhYPa0ixemvzt1qIIGsdLnADw==, tarball: download/@dastyinc/kit-panel/0.0.14/c3d822973b5c3dbc126c6a981b8c14c977972797}
     dependencies:
       '@dastyinc/mas101': 0.0.15
-      '@dastyinc/typed': 0.3.11
+      '@dastyinc/typed': 0.3.13
       bson: 4.7.2
       nunui: 0.0.70
       reconnecting-websocket: 4.4.0
@@ -98,8 +98,8 @@ packages:
     resolution: {integrity: sha512-m/Y5B2UIcvqyMSKwJh1wPGcQA4NFmrckW/9gOJMztZUY/pIwYAYmVGrqFcsU4El5qmhbDbGMn+AALoBccJf9Fw==, tarball: download/@dastyinc/mas101/0.0.15/cef3a2f6bc869ab97c6931ffed82ddeb11d08f11}
     dev: true
 
-  /@dastyinc/typed/0.3.11:
-    resolution: {integrity: sha512-58hGZB8WnJ7QxP0RFpHJW44GhQbgfE3Br68SuTPQCLCAkQEwOMjEm7Kq7ypIOwNrDv6tWdiWibMwEaDvqSz8kQ==, tarball: download/@dastyinc/typed/0.3.11/f2829fbda868d4d3a7f8827e8659f2f0c1b60c89}
+  /@dastyinc/typed/0.3.13:
+    resolution: {integrity: sha512-b04DPREWgM1g1VvD02Qz3leiZ+yHhCvV6Xtndm8s5xJ1/m5XUeokceDCJSVgKkx31IM0B8LuvOCePh7n0zfaQQ==, tarball: download/@dastyinc/typed/0.3.13/fba70be527bec43433a7268688983a0d8dbb1a8c}
     dependencies:
       long: 5.2.1
       protobufjs: 7.1.2
@@ -407,7 +407,7 @@ packages:
       vite: ^4.0.0
     dependencies:
       debug: 4.3.4
-      deepmerge: 4.2.2
+      deepmerge: 4.3.0
       kleur: 4.1.5
       magic-string: 0.27.0
       svelte: 3.55.1
@@ -541,8 +541,8 @@ packages:
       ms: 2.1.2
     dev: true
 
-  /deepmerge/4.2.2:
-    resolution: {integrity: sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==}
+  /deepmerge/4.3.0:
+    resolution: {integrity: sha512-z2wJZXrmeHdvYJp/Ux55wIjqo81G5Bp4c+oELTW+7ar6SogWHajt5a9gO3s3IDaGSAXjDk0vlQKN3rms8ab3og==}
     engines: {node: '>=0.10.0'}
     dev: true
 
