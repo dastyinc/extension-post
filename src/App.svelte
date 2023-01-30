@@ -2,12 +2,13 @@
     import {fade} from "svelte/transition";
     import {getContext, onMount} from "svelte";
     import {Box, Expand} from "@dastyinc/kit-panel";
+    import {IconButton, Icon, Button} from "nunui";
 
     const {throttle, ws, wsStore, api} = getContext('utils');
     const channel = getContext('channel');
     const {user_id, user_name} = getContext('account');
 
-    let sendWs, curr = -1;
+    let sendWs = (...props: any[]) => null, curr = -1;
 
     let posts: any, post_content = "", selected = false;
     let postArr = [];
@@ -21,9 +22,8 @@
         sendWs = send;
         wsStore(message, 'POST_UPDATE').subscribe(updatePost);
     }))
-    $: sendPostUpdate = throttle(() => {
-        sendWs?.('POST_UPDATE');
-    });
+
+    const sendPostUpdate = throttle(() => sendWs('POST_UPDATE'));
 
     async function getPost() {
         posts = await api(`/post/topic/${channel}`)
@@ -41,37 +41,37 @@
         showMore = false;
     }
 
-    async function deleteSelected(id) {
-        await api(`/post/topic/delete/${id}`, {}, 'DELETE')
-        getPost();
-        sendPostUpdate()
-        if (postArr.length !== 1) {
-            await api(`/post/topic/delete/${postArr[0].post_id}`, {}, 'DELETE')
-            post_content = postArr[0].post_content
-            api('/post/topic', {user_id, user_name, channel_id: channel, post_content, selected}).then(() => {
-            }).catch(({error}) => {
-            })
-            post_content = "";
+    function deleteSelected(id) {
+        return async (e) => {
+            e.stopPropagation();
+            await api(`/post/topic/delete/${id}`, {}, 'DELETE')
             getPost();
             sendPostUpdate()
+            if (postArr.length !== 1) {
+                await api(`/post/topic/delete/${postArr[0].post_id}`, {}, 'DELETE')
+                post_content = postArr[0].post_content
+                await api('/post/topic', {user_id, user_name, channel_id: channel, post_content, selected});
+                post_content = "";
+                getPost();
+                sendPostUpdate()
+            }
         }
     }
 
     async function deleteMore(id) {
         await api(`/post/topic/delete/${id}`, {}, 'DELETE')
-        getPost();
         sendPostUpdate();
+        await getPost();
     }
 
     async function updatePost() {
-        getPost()
+        await getPost();
     }
 
     function sendPost() {
         api('/post/topic', {user_id, user_name, channel_id: channel, post_content, selected}).then(() => {
             sendPostUpdate()
-        }).catch(({error}) => {
-        })
+        });
         post_content = "";
         showAdd = false;
     }
@@ -80,18 +80,14 @@
         if (showMore) {
             showMore = false;
             showAdd = !showAdd;
-        } else {
-            showAdd = !showAdd;
-        }
+        } else showAdd = !showAdd;
     }
 
     function showMoreFunc() {
         if (showAdd) {
             showAdd = false;
             showMore = !showMore;
-        } else {
-            showMore = !showMore;
-        }
+        } else showMore = !showMore;
     }
 
     $: if (postArr.length < 2) showMore = false;
@@ -106,15 +102,13 @@
     }
 </script>
 
-<div style="display: flex;">
-    <div class="icon">
-        <div style="margin: auto;">💬</div>
-    </div>
+<div style="display: flex;align-items: baseline">
+    <Icon icon="forum" size="36" style="position: relative;top:6px;"/>
     <div class="title">여기우리 대화방</div>
+    <span style="margin-left: auto;"></span>
+    <IconButton icon={showAdd ? "close" : "add"} on:click={showAddFunc} style="float: right;"/>
 </div>
 
-<div style="float: right; margin-top: -1.4rem"><span class="material-symbols-outlined"
-                                                     on:click={showAddFunc}>{showAdd ? "close" : "add"}</span></div>
 
 {#await getPost()}
     <Box style="padding: 0.938rem 1.25rem 1.25rem 1.25rem">Loading...</Box>
@@ -125,13 +119,12 @@
         </Box>
     {:else}
         <Box hoverCursor onClick={showMoreFunc} hoverScale
-             style="background-color: #6917f3; margin-top: 0.938rem; position:relative; z-index: 2; box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3); padding: 0.938rem 1.25rem 1.25rem 1.25rem">
+             style="background-color: #6917f3; margin-top: 0.938rem; position:relative; z-index: 2; box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3); padding: 0.938rem 1.25rem 1.25rem 1.25rem;cursor: pointer;">
             <div style="display: flex; justify-content: space-between;">
                 <div>
                     <div class="name" style="color: #6917f3;">Topic | {postArr[postArr.length - 1].user_name}</div>
                 </div>
-                <span class="material-symbols-outlined"
-                      on:click|stopPropagation={deleteSelected(postArr[postArr.length - 1].post_id)}>done</span>
+                <IconButton icon="done" on:click={deleteSelected(postArr[postArr.length - 1].post_id)}/>
             </div>
             <div class="content">{postArr[postArr.length - 1].post_content}</div>
         </Box>
@@ -144,12 +137,11 @@
                     {#if i !== postArr.length - 1}
                         <Box hoverCursor onClick={() => alterSelected(post)}
                              style="background-color: #9e17f3; margin-bottom: 0.6rem; box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3); padding: 0.938rem 1.25rem 1.25rem 1.25rem">
-                            <div style="display: flex;">
+                            <div style="display: flex; justify-content: space-between;">
                                 <div>
                                     <div class="name" style="color: #9e17f3;">Topic | {post.user_name}</div>
                                 </div>
-                                <span class="material-symbols-outlined"
-                                      on:click|stopPropagation={deleteMore(post.post_id)}>done</span>
+                                <IconButton icon="done" on:click={deleteSelected(postArr[postArr.length - 1].post_id)}/>
                             </div>
                             <div class="content">{post.post_content}</div>
                         </Box>
@@ -167,21 +159,16 @@
                 <div class="name" style="color: #18137f;">Topic | 나</div>
                 <textarea placeholder="추가할 주제를 입력해주세요" spellcheck="false" bind:value={post_content} bind:this={input}
                           autofocus rows="1"></textarea>
-                <div class="submit" on:click={sendPost}>완료</div>
+                <Button small transparent style="float: right" on:click={sendPost}>완료</Button>
+                <br> <br>
             </Box>
         </div>
     </Expand>
 {/if}
 
 <style lang="scss">
-  .icon {
-    font-size: 2.25rem;
-    margin-right: 0.625rem;
-    width: 10.8%;
-    height: 10.8%;
-  }
-
   .title {
+    margin-left: 6px;
     font-size: 1.75rem;
     font-weight: 900;
     line-height: 3rem;
@@ -203,10 +190,7 @@
     margin: 0.625rem 0 0.138rem 0.45rem;
     font-size: 1.25rem;
     height: fit-content;
-  }
-
-  span {
-    -webkit-user-select: none;
+    white-space: pre;
   }
 
   .post-container {
@@ -217,13 +201,13 @@
     margin-bottom: -4rem;
     padding-top: 4rem;
     overflow-y: scroll;
-    height: 17rem;
+    max-height: 17rem;
     -ms-overflow-style: none;
     scrollbar-width: none;
-  }
 
-  .post-container::-webkit-scrollbar {
-    display: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   textarea {
@@ -235,37 +219,17 @@
     font-weight: bold;
     color: #bcc3cb;
     margin-top: 0.625rem;
-  }
-
-  textarea::placeholder {
-    color: white;
-    font-weight: 100;
-  }
-
-  textarea:focus {
     outline: none;
-  }
 
-  .submit {
-    margin-top: 0.625rem;
-    margin-left: auto;
-    color: white;
-    font-size: 1rem;
-    font-weight: normal;
-    width: fit-content;
-    padding: 0 0.4rem 0 0.4rem;
-    line-height: 1.4rem;
-  }
-
-  .submit:hover {
-    cursor: pointer;
+    &::placeholder {
+      color: white;
+      font-weight: 100;
+    }
   }
 
   span {
+    -webkit-user-select: none;
     margin-left: auto;
-  }
-
-  span:hover {
     cursor: pointer;
   }
 </style>
