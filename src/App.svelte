@@ -1,7 +1,7 @@
 <script lang="ts">
     import {fade} from "svelte/transition";
     import {getContext, onMount} from "svelte";
-    import {Box} from "@dastyinc/kit-panel";
+    import {Box, Expand} from "@dastyinc/kit-panel";
 
     const {throttle, ws, wsStore, api} = getContext('utils');
     const channel = getContext('channel');
@@ -96,6 +96,14 @@
 
     $: if (postArr.length < 2) showMore = false;
 
+    let input;
+    const hide = () => ({duration: 200, css: (t) => `opacity: ${t};height: 0;`});
+
+    $: if (input) {
+        void post_content;
+        input.style.height = "1px";
+        input.style.height = (12 + input.scrollHeight) + "px";
+    }
 </script>
 
 <div style="display: flex;">
@@ -130,7 +138,7 @@
     {/if}
 
     {#if showMore}
-        <div style="height: fit-content;">
+        <div style="height: fit-content;" out:hide>
             <div class="post-container" transition:fade>
                 {#each postArr as post, i}
                     {#if i !== postArr.length - 1}
@@ -153,13 +161,16 @@
 {/await}
 
 {#if showAdd}
-    <div transition:fade>
-        <Box style="background-color: #18137f; margin-top: 0.6rem; position:relative; top: -1.5rem; z-index:3; scale:105%; margin-bottom: -1.5rem; box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3); padding: 0.938rem 1.25rem 1.25rem 1.25rem">
-            <div class="name" style="color: #18137f;">Topic | 나</div>
-            <textarea placeholder="추가할 주제를 입력해주세요" spellcheck="false" bind:value={post_content} autofocus rows="1"/>
-            <div class="submit" on:click={sendPost}>완료</div>
-        </Box>
-    </div>
+    <Expand>
+        <div in:fade={{duration: 200}} out:hide>
+            <Box style="background-color: #18137f; margin-top: 0.6rem; position:relative; top: -1.5rem; z-index:3; scale:105%; margin-bottom: -1.5rem; box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3); padding: 0.938rem 1.25rem 1.25rem 1.25rem">
+                <div class="name" style="color: #18137f;">Topic | 나</div>
+                <textarea placeholder="추가할 주제를 입력해주세요" spellcheck="false" bind:value={post_content} bind:this={input}
+                          autofocus rows="1"></textarea>
+                <div class="submit" on:click={sendPost}>완료</div>
+            </Box>
+        </div>
+    </Expand>
 {/if}
 
 <style lang="scss">
